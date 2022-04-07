@@ -63,4 +63,21 @@ def insert_all_forwards_data():
                 
 #Function ran and forwards data added on 4/3
 #insert_all_forwards_data()
+
+def insert_all_defensemen_data():
+    path = "C:\\Users\\Work\\OneDrive\\Desktop\\CSE 460 Project\\csv_files\\all_sabres_player_data_csv.csv"
+    with open(path) as csv_file:
+        reader = csv.reader(csv_file, delimiter=',')
+        for row in reader:
+            if row[1] =='D':
+                plusminus = row[6]
+                if plusminus == '':
+                    plusminus = 0
+            
+                name = repr(row[0])
+                cur.execute(insert_statements.defensemen(name, row[2], row[3], row[4], row[5], plusminus))
+                conn.commit()
+
+#insert_all_defensemen_data()
+
 conn.close()
