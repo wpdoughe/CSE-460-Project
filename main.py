@@ -78,6 +78,7 @@ def insert_all_defensemen_data():
                 cur.execute(insert_statements.defensemen(name, row[2], row[3], row[4], row[5], plusminus))
                 conn.commit()
 
-#insert_all_defensemen_data()
 
+#Function ran and defensemen data added on 4/9
+#insert_all_defensemen_data()
 conn.close()
