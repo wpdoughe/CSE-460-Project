@@ -78,6 +78,15 @@ def insert_all_defensemen_data():
                 cur.execute(insert_statements.defensemen(name, row[2], row[3], row[4], row[5], plusminus))
                 conn.commit()
 
-#insert_all_defensemen_data()
+def insert_all_players_data():
+    path = "C:\\Users\\Work\\OneDrive\\Desktop\\CSE 460 Project\\csv_files\\all_sabres_player_data_csv.csv"
+    with open(path) as csv_file:
+        reader = csv.reader(csv_file, delimiter=',')
+        for row in reader:
+            name = repr(row[0])
+            cur.execute(insert_statements.players(row[2], row[3], name))
+            conn.commit()
+
+#insert_all_players_data()
 
 conn.close()
