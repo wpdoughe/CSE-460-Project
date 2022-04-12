@@ -85,12 +85,12 @@ def insert_all_players_data():
         for row in reader:
             name = repr(row[0])
             if row[1] != 'G':
-                data = row[7]
+                data = repr(row[7])
                 start = data[0:4]
                 end = data[-4:]
                 cur.execute(insert_statements.players(start, end, name))
             else:
-                data = row[6]
+                data = repr(row[6])
                 start = data[0:4]
                 end = data[-4:]
                 cur.execute(insert_statements.players(start, end, name))
