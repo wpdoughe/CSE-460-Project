@@ -78,7 +78,24 @@ def insert_all_defensemen_data():
                 cur.execute(insert_statements.defensemen(name, row[2], row[3], row[4], row[5], plusminus))
                 conn.commit()
 
+def insert_all_players_data():
+    path = "C:\\Users\\Work\\OneDrive\\Desktop\\CSE 460 Project\\csv_files\\all_sabres_player_data_csv.csv"
+    with open(path) as csv_file:
+        reader = csv.reader(csv_file, delimiter=',')
+        for row in reader:
+            name = repr(row[0])
+            if row[1] != 'G':
+                data = repr(row[7])
+                start = data[0:4]
+                end = data[-4:]
+                cur.execute(insert_statements.players(start, end, name))
+            else:
+                data = repr(row[6])
+                start = data[0:4]
+                end = data[-4:]
+                cur.execute(insert_statements.players(start, end, name))
+            conn.commit()
 
-#Function ran and defensemen data added on 4/9
-#insert_all_defensemen_data()
+#insert_all_players_data()
+
 conn.close()
