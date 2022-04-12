@@ -85,9 +85,15 @@ def insert_all_players_data():
         for row in reader:
             name = repr(row[0])
             if row[1] != 'G':
-                cur.execute(insert_statements.players(row[7], row[8], name))
+                data = row[7]
+                start = data[0:4]
+                end = data[-4:]
+                cur.execute(insert_statements.players(start, end, name))
             else:
-                cur.execute(insert_statements.players(row[6], row[7], name))
+                data = row[6]
+                start = data[0:4]
+                end = data[-4:]
+                cur.execute(insert_statements.players(start, end, name))
             conn.commit()
 
 #insert_all_players_data()
