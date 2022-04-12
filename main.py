@@ -84,16 +84,10 @@ def insert_all_players_data():
         reader = csv.reader(csv_file, delimiter=',')
         for row in reader:
             name = repr(row[0])
-            if row[1] != 'G':
-                data = repr(row[7])
-                start = data[0:4]
-                end = data[-4:]
-                cur.execute(insert_statements.players(start, end, name))
-            else:
-                data = repr(row[6])
-                start = data[0:4]
-                end = data[-4:]
-                cur.execute(insert_statements.players(start, end, name))
+            years = repr(row[7])
+            start = years[1:5]
+            end = years[6:10]
+            cur.execute(insert_statements.players(int(start), int(end), name))
             conn.commit()
 
 #insert_all_players_data()
