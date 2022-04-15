@@ -92,4 +92,16 @@ def insert_all_players_data():
             cur.execute(insert_statements.players(int(start), int(end), name))
             conn.commit()
 
+def insert_all_goalies_data():
+    '''
+    Below is the order of data in the CSV file for clarity on how it is extracted from goalies.csv
+    Name is row[1], GP is row[3], Wins is row[6], Losses is row[7], GAA is row[4], save_percentage  is row[5]
+    '''
+    path = "C:\\Users\\Work\\OneDrive\\Desktop\\CSE 460 Project\\csv_files\\goalies.csv"
+    with open(path) as csv_file:
+        reader = csv.reader(csv_file, delimiter=',')
+        for row in reader:
+            cur.execute(insert_statements.goalies(repr(row[1]), row[3], row[6], row[7], row[4], row[5]))
+            conn.commit()
+
 conn.close()

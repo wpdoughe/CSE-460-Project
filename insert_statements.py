@@ -9,3 +9,6 @@ def defensemen(name, gp, g, a, pts, plusminus):
 
 def players(starting_season, ending_season, name):
     return f"INSERT INTO Players VALUES({starting_season}, {ending_season}, {name})"
+
+def goalies(name, gp, w, l, gaa, sv):
+    return f"INSERT INTO Goalies VALUES({name}, {gp}, {w}, {l}, {gaa}, {sv})"
