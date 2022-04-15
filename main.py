@@ -114,4 +114,7 @@ def insert_all_goalies_data():
             cur.execute(insert_statements.goalies(name, GP, W, L, GAA, SV))
             conn.commit()
 
+#Function ran and goalie data added on 4/15
+#insert_all_goalies_data()
+
 conn.close()
