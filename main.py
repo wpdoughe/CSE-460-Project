@@ -101,7 +101,17 @@ def insert_all_goalies_data():
     with open(path) as csv_file:
         reader = csv.reader(csv_file, delimiter=',')
         for row in reader:
-            cur.execute(insert_statements.goalies(repr(row[1]), row[3], row[6], row[7], row[4], row[5]))
+            name = repr(row[1])
+            GP = row[3]
+            W = row[6]
+            L = row[7]
+            GAA = row[4]
+            if GAA == '':
+                GAA = 0
+            SV = row[5]
+            if SV == '':
+                SV = 0
+            cur.execute(insert_statements.goalies(name, GP, W, L, GAA, SV))
             conn.commit()
 
 conn.close()
