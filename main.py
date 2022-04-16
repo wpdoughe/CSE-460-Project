@@ -77,7 +77,7 @@ def insert_all_defensemen_data():
                 name = repr(row[0])
                 cur.execute(insert_statements.defensemen(name, row[2], row[3], row[4], row[5], plusminus))
                 conn.commit()
-                
+
 #File ran and players data added on 4/13
 #insert_all_players_data()
 def insert_all_players_data():
@@ -116,5 +116,64 @@ def insert_all_goalies_data():
 
 #Function ran and goalie data added on 4/15
 #insert_all_goalies_data()
+
+def testing():
+    data = []
+    testQuery1 = "SELECT * FROM Players WHERE name = 'RICK MARTIN'"
+    cur.execute(testQuery1)
+    for (start, end, name) in cur:
+        data.append([start, end, name])
+
+    if (data[0][2] != "RICK MARTIN"):
+        print("testQuery1 failed.")
+
+    data2 = []
+    testQuery2 = ("INSERT INTO Players "
+                "(starting_season, ending_season, name) "
+                "VALUES (%s, %s, %s")
+    dataQuery2 = (2010, 2011, "TEST PLAYER")
+    cur.execute(testQuery1, dataQuery2)
+
+    testQuery3 = "SELECT * FROM Players WHERE name = 'TEST PLAYER'"
+    cur.execute(testQuery3)
+    for (start, end, name) in cur: 
+        data2.append([start, end, name])
+
+    if (data2[0][2] != "TEST PLAYER"):
+        print("testQuery3 failed.")
+
+    data3 = []
+    testQuery4 = "UPDATE Players SET starting_season = %s WHERE name = 'TEST PLAYER'"
+    dataQuery4 = (2009)
+    cur.execute(testQuery4, dataQuery4)
+
+    testQuery5 = "SELECT * FROM Players WHERE name = 'TEST PLAYER'"
+    cur.execute(testQuery5)
+    for (start, end, name) in cur: 
+        data3.append([start, end, name])
+    
+    if (data3[0][0] != 2009):
+        print("testQuery5 failed")
+
+    testQuery6 = "DELETE FROM Players WHERE name = 'TEST PLAYER'"
+    cur.execute(testQuery6)
+
+    data4 = []
+    testQuery7 = "SELECT * FROM Players WHERE name = 'TEST PLAYER'"
+    cur.execute(testQuery7)
+    for (start, end, name) in cur:
+        data4.append([start, end, name])
+    
+    if (data4 != []):
+        print("testQuery6 failed")
+    
+    data5 = []
+    testQuery8 = "SELECT max(gp) FROM Forwards"
+    cur.execute(testQuery8)
+    for (gp) in cur: 
+        data5.append(gp)
+    
+    if (data5[0][0] != 1191):
+        print("testQuery8 has failed")
 
 conn.close()
