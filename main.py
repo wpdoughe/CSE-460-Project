@@ -121,8 +121,8 @@ def testing():
     data = []
     testQuery1 = "SELECT * FROM Players WHERE name = 'RICK MARTIN'"
     cur.execute(testQuery1)
-    for (start, end, name) in cur:
-        data.append([start, end, name])
+    for (starting_season, ending_season, name) in cur:
+        data.append([starting_season, ending_season, name])
 
     if (data[0][2] != "RICK MARTIN"):
         print("testQuery1 failed.")
@@ -136,8 +136,8 @@ def testing():
 
     testQuery3 = "SELECT * FROM Players WHERE name = 'TEST PLAYER'"
     cur.execute(testQuery3)
-    for (start, end, name) in cur: 
-        data2.append([start, end, name])
+    for (starting_season, ending_season, name) in cur: 
+        data2.append([starting_season, ending_season, name])
 
     if (data2[0][2] != "TEST PLAYER"):
         print("testQuery3 failed.")
@@ -149,8 +149,8 @@ def testing():
 
     testQuery5 = "SELECT * FROM Players WHERE name = 'TEST PLAYER'"
     cur.execute(testQuery5)
-    for (start, end, name) in cur: 
-        data3.append([start, end, name])
+    for (starting_season, ending_season, name) in cur: 
+        data3.append([starting_season, ending_season, name])
     
     if (data3[0][0] != 2009):
         print("testQuery5 failed")
@@ -161,19 +161,25 @@ def testing():
     data4 = []
     testQuery7 = "SELECT * FROM Players WHERE name = 'TEST PLAYER'"
     cur.execute(testQuery7)
-    for (start, end, name) in cur:
-        data4.append([start, end, name])
+    for (starting_season, ending_season, name) in cur:
+        data4.append([starting_season, ending_season, name])
     
     if (data4 != []):
         print("testQuery6 failed")
     
     data5 = []
-    testQuery8 = "SELECT max(gp) FROM Forwards"
+    testQuery8 = "SELECT MAX(goals) FROM Forwards"
     cur.execute(testQuery8)
-    for (gp) in cur: 
-        data5.append(gp)
+    for (games_played) in cur: 
+        data5.append(games_played)
     
-    if (data5[0][0] != 1191):
+    if (data5[0][0] != 512):
         print("testQuery8 has failed")
+
+    cur.execute("SELECT * FROM Defensemen ORDER BY games_played DESC")
+    cur.execute("SELECT * FROM Seasons NATURAL JOIN Players")
+    cur.execute("SELECT COUNT(starting_season), starting_season FROM Players GROUP BY starting_season")
+    cur.execute("SELECT * FROM Forwards WHERE name in (SELECT * FROM Seasons NATURAL JOIN Players)")
+    
 
 conn.close()
