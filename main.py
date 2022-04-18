@@ -182,11 +182,11 @@ def testing():
         data3.append([starting_season, ending_season, name])
     
     print("********************")
-    if (data3[0][0] != 2009 and data3[0][2] == "TEST PLAYER"):
-        print("Test 3: failed")
-    else:
+    if (data3[0][0] == 2009 and data3[0][2] == "TEST PLAYER"):
         print("Test 3: passed")
         print("This tested the UPDATE query by verifying that the starting season for TEST PLAYER is now 2009, instead of 2010")
+    else:
+        print("Test 3: failed")
     print("********************")
 
     # Test 4: Delete
