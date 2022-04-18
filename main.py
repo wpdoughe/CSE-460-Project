@@ -118,68 +118,117 @@ def insert_all_goalies_data():
 #insert_all_goalies_data()
 
 def testing():
+    # Test 1: SELECT
     data = []
-    testQuery1 = "SELECT * FROM Players WHERE name = 'RICK MARTIN'"
+    testQuery1 = "SELECT * FROM Players WHERE name = 'Rick Martin'"
     cur.execute(testQuery1)
+    conn.commit()
+    
     for (starting_season, ending_season, name) in cur:
         data.append([starting_season, ending_season, name])
+    
+    print("********************")
+    if (data[0][2] == "Rick Martin"):
+        print("Test 1: passed")
+        print("This tested the SELECT query by verifying data we already know exists in the database")
+    else:
+        print("Test 1: failed")
+    print("********************")
 
-    if (data[0][2] != "RICK MARTIN"):
-        print("testQuery1 failed.")
-
+    # Test 2: INSERT
     data2 = []
-    testQuery2 = ("INSERT INTO Players "
-                "(starting_season, ending_season, name) "
-                "VALUES (%s, %s, %s")
+
+    #verify TEST PLAYER is not already in the database
+    test_not_already_in_db = "SELECT * FROM Players WHERE name = 'TEST PLAYER'"
+    test_not_already_in_db_arr = []
+    cur.execute(test_not_already_in_db)
+    conn.commit()
+    for i in cur:
+        test_not_already_in_db_arr.append(i)
+
+
     dataQuery2 = (2010, 2011, "TEST PLAYER")
-    cur.execute(testQuery1, dataQuery2)
+    testQuery2 = (f"INSERT INTO Players VALUES ({dataQuery2[0]}, {dataQuery2[1]}, {repr(dataQuery2[2])})")
+    cur.execute(testQuery2)
+    conn.commit()
 
     testQuery3 = "SELECT * FROM Players WHERE name = 'TEST PLAYER'"
     cur.execute(testQuery3)
+    conn.commit()
+
     for (starting_season, ending_season, name) in cur: 
         data2.append([starting_season, ending_season, name])
 
-    if (data2[0][2] != "TEST PLAYER"):
-        print("testQuery3 failed.")
+    print("********************")
+    if (data2[0][0] == 2010 and data2[0][1] == 2011 and data2[0][2] == "TEST PLAYER" and len(test_not_already_in_db_arr) == 0):
+        print("Test 2: passed")
+        print("This tested the INSERT query by verifiying that the starting year, ending year, and name all match what we inserted into the database.")
+        print("(also tested that TEST PLAYER did not exist in the database before insertion)")
+    else:
+        print("Test 2: failed")
+    print("********************")
 
+    # Test 3: Update
     data3 = []
-    testQuery4 = "UPDATE Players SET starting_season = %s WHERE name = 'TEST PLAYER'"
-    dataQuery4 = (2009)
-    cur.execute(testQuery4, dataQuery4)
+    dataQuery4 = [2009]
+    testQuery4 = f"UPDATE Players SET starting_season = {dataQuery4[0]} WHERE name = 'TEST PLAYER'"
+    cur.execute(testQuery4)
+    conn.commit()
 
     testQuery5 = "SELECT * FROM Players WHERE name = 'TEST PLAYER'"
     cur.execute(testQuery5)
+    conn.commit()
     for (starting_season, ending_season, name) in cur: 
         data3.append([starting_season, ending_season, name])
     
-    if (data3[0][0] != 2009):
-        print("testQuery5 failed")
+    print("********************")
+    if (data3[0][0] != 2009 and data3[0][2] == "TEST PLAYER"):
+        print("Test 3: failed")
+    else:
+        print("Test 3: passed")
+        print("This tested the UPDATE query by verifying that the starting season for TEST PLAYER is now 2009, instead of 2010")
+    print("********************")
 
+    # Test 4: Delete
     testQuery6 = "DELETE FROM Players WHERE name = 'TEST PLAYER'"
     cur.execute(testQuery6)
+    conn.commit()
 
     data4 = []
     testQuery7 = "SELECT * FROM Players WHERE name = 'TEST PLAYER'"
     cur.execute(testQuery7)
+    conn.commit()
     for (starting_season, ending_season, name) in cur:
         data4.append([starting_season, ending_season, name])
-    
-    if (data4 != []):
-        print("testQuery6 failed")
-    
+
+    print("********************")
+    if (len(data4) == 0):
+        print("Test 4: passed")
+        print("This tested the DELETE query by verifying that the entry for TEST PLAYER no longer exists in the database")
+    else:
+        print("Test 4: failed")
+    print("********************")
+
+    #Test 5: MAX
     data5 = []
     testQuery8 = "SELECT MAX(goals) FROM Forwards"
     cur.execute(testQuery8)
+    conn.commit()
     for (games_played) in cur: 
         data5.append(games_played)
     
-    if (data5[0][0] != 512):
-        print("testQuery8 has failed")
+    print("********************")
+    if (data5[0][0] == 512):
+        print("Test 5: passed")
+        print("This tested the MAX query by grabbing the maximun amount of goals a forward has in our database")
+    else:
+        print("Test 5: failed")
+    print("********************")
 
-    cur.execute("SELECT * FROM Defensemen ORDER BY games_played DESC")
-    cur.execute("SELECT * FROM Seasons NATURAL JOIN Players")
-    cur.execute("SELECT COUNT(starting_season), starting_season FROM Players GROUP BY starting_season")
-    cur.execute("SELECT * FROM Forwards WHERE name in (SELECT * FROM Seasons NATURAL JOIN Players)")
+    # cur.execute("SELECT * FROM Defensemen ORDER BY games_played DESC")
+    # cur.execute("SELECT * FROM Seasons NATURAL JOIN Players")
+    # cur.execute("SELECT COUNT(starting_season), starting_season FROM Players GROUP BY starting_season")
+    # cur.execute("SELECT * FROM Forwards WHERE name in (SELECT * FROM Seasons NATURAL JOIN Players)")
     
-
+testing()
 conn.close()
